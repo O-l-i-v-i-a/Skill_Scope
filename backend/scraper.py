@@ -2,27 +2,17 @@ import requests
 import time
 import os
 import re
-import spacy
 from supabase import create_client
 from dotenv import load_dotenv
 load_dotenv()
 
-# =========================
-# SUPABASE INIT
-# =========================
+
 SUPABASE_URL = os.getenv("SUPABASE_URL")
 SUPABASE_KEY = os.getenv("SUPABASE_KEY")
 
 supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
 
-# =========================
-# NLP MODEL
-# =========================
-nlp = spacy.load("en_core_web_sm")
 
-# =========================
-# SKILL DICTIONARY
-# =========================
 SKILL_MAP = {
     "Python": [r"\bpython\b"],
     "Java": [r"\bjava\b(?!script)"],
@@ -40,9 +30,7 @@ SKILL_MAP = {
     "Node.js": [r"\bnode\.?js\b|\bnode\b"],
 }
 
-# =========================
-# RULE-BASED SKILL EXTRACTION
-# =========================
+
 def extract_skills_rule(text: str):
     text = text.lower()
     found = set()
@@ -54,9 +42,7 @@ def extract_skills_rule(text: str):
 
     return list(found)
 
-# =========================
-# HYBRID SKILL ENGINE
-# =========================
+
 def extract_skills(text: str):
     skills = extract_skills_rule(text)
 
@@ -68,13 +54,11 @@ def extract_skills(text: str):
 
     return list(cleaned)
 
-# =========================
-# JOB NORMALIZATION
-# =========================
+
 def normalize_job_title(title: str):
     t = title.lower()
 
-    # Software Engineer family (FIXED PROPERLY)
+    
     if "software engineer" in t:
         if "principal" in t:
             return "Software Engineer (Principal)"
@@ -107,16 +91,12 @@ def normalize_job_title(title: str):
 
     return "Other"
 
-# =========================
-# CLEAN SKILLS
-# =========================
+
 def clean_skills(skills):
     stopwords = {"experience", "work", "job", "team", "company", "role"}
     return [s for s in skills if s.lower() not in stopwords]
 
-# =========================
-# SERPAPI FETCH
-# =========================
+
 def fetch_jobs(query):
     url = "https://serpapi.com/search"
     params = {
@@ -131,9 +111,7 @@ def fetch_jobs(query):
 
     return res.get("jobs_results", [])
 
-# =========================
-# PROCESS JOB
-# =========================
+
 def process_job(job):
     title = job.get("title", "")
     desc = job.get("description", "")
@@ -149,9 +127,7 @@ def process_job(job):
         "skills": skills
     }
 
-# =========================
-# SAVE TO SUPABASE
-# =========================
+
 def save_to_db(rows):
     if not rows:
         return
@@ -161,9 +137,7 @@ def save_to_db(rows):
         on_conflict="title,company"
     ).execute()
 
-# =========================
-# MAIN SCRAPER
-# =========================
+
 def run_scraper(query):
     print(f"\n🔍 Scraping: {query}")
 
@@ -188,9 +162,7 @@ def run_scraper(query):
     print(f"💾 Saved {len(processed)} jobs")
 
 
-# =========================
-# ENTRY POINT
-# =========================
+
 if __name__ == "__main__":
 
     queries = [
