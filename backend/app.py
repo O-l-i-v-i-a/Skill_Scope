@@ -12,7 +12,7 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=[
         "http://localhost:5173",
-        "https://skill-scope.onrender.com"
+        "https://skill-scope-six.vercel.app"
     ],
     allow_credentials=True,
     allow_methods=["*"],
