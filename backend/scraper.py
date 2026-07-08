@@ -6,6 +6,10 @@ from supabase import create_client
 from dotenv import load_dotenv
 load_dotenv()
 
+print("Python:", os.sys.version)
+print("SERPAPI key exists:", bool(os.getenv("SERPAPI_API_KEY")))
+print("SUPABASE_URL exists:", bool(os.getenv("SUPABASE_URL")))
+
 
 SUPABASE_URL = os.getenv("SUPABASE_URL")
 SUPABASE_KEY = os.getenv("SUPABASE_KEY")
