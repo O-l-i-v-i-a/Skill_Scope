@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 print("Python:", os.sys.version)
-print("SERPAPI key exists:", bool(os.getenv("SERPAPI_API_KEY")))
+print("SERPAPI key exists:", bool(os.getenv("SERPAPI_KEY")))
 print("SUPABASE_URL exists:", bool(os.getenv("SUPABASE_URL")))
 
 
